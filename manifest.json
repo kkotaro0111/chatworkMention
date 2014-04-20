@@ -1,6 +1,6 @@
 {
   "name": "Chatwork Mention",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "manifest_version": 2,
   "description": "This extension was created with the awesome extensionizr.com",
   "homepage_url": "http://extensionizr.com",
@@ -11,6 +11,7 @@
   },
   "default_locale": "en",
   "permissions": [
+    "tabs",
     "https://www.chatwork.com/*"
   ],
   "content_scripts": [
@@ -20,8 +21,10 @@
       ],
       "js": [
         "js/jquery/jquery.min.js",
+        "js/migemojs/scripts/migemo.js",
         "src/inject/inject.js"
-      ]
+      ],
+      "run_at": "document_end"
     }
   ]
 }
