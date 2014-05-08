@@ -8,6 +8,7 @@ chrome.extension.sendMessage({}, function(response) {
       console.log("Hello. This message was sent from scripts/inject.js");
       // ----------------------------------------------------------
 
+      var app = app || {};
 
       //create searchform
       function createSearchForm(){
@@ -35,29 +36,42 @@ chrome.extension.sendMessage({}, function(response) {
 
       var searchform$ = setSearchForm();
 
-      setTimeout(function(){
+      function loadGlobalVars(){
         var s = $("body").find("script").first();
-        //console.log(s.text());
-        eval(s.text());
+        app.p = {};
+        var s2 = s.text().replace(/var /g, "app.p.");
+        console.log(s.text(), s2);
+        eval(s2);
 
-        //console.log(myid);
+        console.log(app.p.myid);
+      }
+
+      function getFirstRoomId(){
+        return 0;
+      }
+
+      function init(){
+        loadGlobalVars();
+
+        app.p.rid = getFirstRoomId();
 
         $.ajax({
           url: "gateway.php",
           data: {
             cmd:"init_load",
-            myid:"355232",
-            _v:"1.80a",
+            myid: app.p.myid,
+            _v: app.p.client_ver,
             _av:4,
-            _t:"7b000f9bfec65c0017ff3e92f04342cb11838bef5353c15ddfcfc",
+            _t: app.p.ACCESS_TOKEN,
             ln:"ja",
-            rid:150795,
+            rid: app.p.rid,
             type: "",
             new:1
           },
           dataType: "json",
           type: "get"
         }).then(function(data){
+          console.log("ajax data", data);
           RL = {};
           AC = {};
           RL.rooms = data.result.room_dat;
@@ -71,8 +85,9 @@ chrome.extension.sendMessage({}, function(response) {
           });
           //console.log(RL.rooms);
           AC.account_dat = data.result.contact_dat;
-        });
-      }, 1000);
+        });      }
+
+      init();
 
       $("#_roomListItems").on("click", "li._roomLink", function(){
         //console.log($(this), $(this).data("rid"));
@@ -103,7 +118,6 @@ chrome.extension.sendMessage({}, function(response) {
         });
       });
 
-      
     }
   }, 10);
 });
