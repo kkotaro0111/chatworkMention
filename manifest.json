@@ -19,9 +19,11 @@
       "matches": [
         "https://www.chatwork.com/*"
       ],
+      "css":[
+        "css/inject.css"
+      ],
       "js": [
         "js/jquery/jquery.min.js",
-        "js/migemo.js",
         "src/inject/inject.js"
       ],
       "run_at": "document_end"
